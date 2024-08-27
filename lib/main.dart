@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() {
   runApp(
     BlocProvider(
-      create: (context) => StudentBloc(),
+      create: (context) => StudentBloc()..add(StudentsFetchEvent()),
       child: const MyApp(),
     ),
   );
@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MainPage(),
     );
   }
