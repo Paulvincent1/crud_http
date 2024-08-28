@@ -1,7 +1,5 @@
-import 'package:crud_http/bloc/student_bloc.dart';
-import 'package:crud_http/services/student_services.dart';
+import 'package:crud_http/pages/add_student_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'students_page.dart';
 
@@ -13,12 +11,6 @@ class MainPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.read<StudentBloc>().add(StudentAddStudentEvent());
-          },
-          child: Text('fetch'),
-        ),
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: Colors.green[400],
@@ -41,113 +33,7 @@ class MainPage extends StatelessWidget {
         body: TabBarView(
           children: [
             Student(),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        labelText: "First Name",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: 'First Name',
-                        focusedBorder: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        labelText: "Last Name",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: 'Last Name',
-                        focusedBorder: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        labelText: "Course",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: 'Course',
-                        focusedBorder: OutlineInputBorder(),
-                        enabledBorder: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18.0, vertical: 8.0),
-                    child: DropdownMenu(
-                        onSelected: (year) {},
-                        label: Text('Select Year'),
-                        dropdownMenuEntries: [
-                          DropdownMenuEntry(
-                              value: "First Year", label: 'First Year'),
-                          DropdownMenuEntry(
-                              value: "Second Year", label: 'Second Year'),
-                          DropdownMenuEntry(
-                              value: "Third Year", label: 'Third Year'),
-                          DropdownMenuEntry(
-                              value: "Fourth Year", label: 'Fourth Year'),
-                          DropdownMenuEntry(
-                              value: "Fifth Year", label: 'Fifth Year'),
-                        ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Row(
-                      children: [
-                        Text('Enrolled'),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Switch(
-                          value: false,
-                          onChanged: (value) {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Text('data'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green[200],
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
+            AddStudent(),
           ],
         ),
       ),

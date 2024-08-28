@@ -26,13 +26,12 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
 
       emit(StudentFetchSuccessState(students: students));
     } catch (e) {
-      emit(StudentFetchFailedState(error: "from failed state ${e}")
-        ..printError());
+      emit(StudentFetchFailedState(error: "${e}"));
     }
   }
 
   FutureOr<void> studentAddStudentEvent(
       StudentAddStudentEvent event, Emitter<StudentState> emit) async {
-    emit(StudentPostLoadingState()..test());
+    emit(StudentPostLoadingState());
   }
 }

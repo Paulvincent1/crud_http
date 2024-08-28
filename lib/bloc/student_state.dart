@@ -6,6 +6,8 @@ sealed class StudentState {}
 
 class StudentActionState extends StudentState {}
 
+class StudentActionAndBuildState extends StudentState {}
+
 final class StudentInitial extends StudentState {}
 
 class StudentFetchLoadingState extends StudentState {}
@@ -17,19 +19,11 @@ class StudentFetchSuccessState extends StudentState {
   });
 }
 
-class StudentFetchFailedState extends StudentState {
+class StudentFetchFailedState extends StudentActionAndBuildState {
   String error;
   StudentFetchFailedState({
     required this.error,
   });
-
-  void printError() {
-    print(error);
-  }
 }
 
-class StudentPostLoadingState extends StudentActionState {
-  void test() {
-    print('hi');
-  }
-}
+class StudentPostLoadingState extends StudentActionState {}

@@ -19,15 +19,21 @@ class Student extends StatelessWidget {
         Expanded(
           child: Container(
             child: BlocConsumer<StudentBloc, StudentState>(
-              listenWhen: (previous, current) => current is StudentActionState,
+              listenWhen: (previous, current) =>
+                  current is StudentActionState ||
+                  current is StudentActionAndBuildState,
               listener: (context, state) {
-                // Perform action based on state change
-                if (state is StudentPostLoadingState) {
-                  // This will be triggered when the StudentInitial state is encountered
-                  print('Initial state received');
+                if (state is StudentFetchFailedState) {
+                  state is StudentFetchFailedState;
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.error),
+                    duration: Duration(seconds: 2),
+                  ));
                 }
               },
-              buildWhen: (previous, current) => current is! StudentActionState,
+              buildWhen: (previous, current) =>
+                  current is! StudentActionState ||
+                  current is StudentActionAndBuildState,
               builder: (context, state) {
                 switch (state.runtimeType) {
                   case StudentFetchLoadingState:
@@ -75,6 +81,20 @@ class Student extends StatelessWidget {
                                 ),
                               ));
                         },
+                      ),
+                    );
+                  case StudentFetchFailedState:
+                    return Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.read<StudentBloc>().add(StudentsFetchEvent());
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        child: Text("Error: Click to Refresh"),
                       ),
                     );
                   default:
