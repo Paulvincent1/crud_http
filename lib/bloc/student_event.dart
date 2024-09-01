@@ -5,4 +5,28 @@ sealed class StudentEvent {}
 
 class StudentsFetchEvent extends StudentEvent {}
 
-class StudentAddStudentEvent extends StudentEvent {}
+// Add student page
+class StudentSelectedYearEvent extends StudentEvent {
+  final String? errorTextSelectedYear;
+
+  StudentSelectedYearEvent({required this.errorTextSelectedYear});
+}
+
+class StudentEnrolledSwitchEvent extends StudentEvent {
+  final bool isEnrolled;
+  StudentEnrolledSwitchEvent({required this.isEnrolled});
+}
+
+class StudentPostEvent extends StudentEvent {
+  String firstname;
+  String lastname;
+  String course;
+  String year;
+  int enrolled;
+  StudentPostEvent(
+      {required this.firstname,
+      required this.lastname,
+      required this.course,
+      required this.year,
+      required this.enrolled});
+}

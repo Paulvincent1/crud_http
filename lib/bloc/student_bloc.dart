@@ -12,7 +12,9 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   StudentBloc() : super(StudentInitial()) {
     on<StudentEvent>(studentEvent);
     on<StudentsFetchEvent>(studentsFetchEvent);
-    on<StudentAddStudentEvent>(studentAddStudentEvent);
+    on<StudentPostEvent>(studentPostEvent);
+    on<StudentSelectedYearEvent>(studentSelectedYearEvent);
+    on<StudentEnrolledSwitchEvent>(studentEnrolledSwitchEvent);
   }
 
   FutureOr<void> studentEvent(StudentEvent event, Emitter<StudentState> emit) {}
@@ -30,8 +32,33 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     }
   }
 
-  FutureOr<void> studentAddStudentEvent(
-      StudentAddStudentEvent event, Emitter<StudentState> emit) async {
+  // Add student page
+  FutureOr<void> studentPostEvent(
+      StudentPostEvent event, Emitter<StudentState> emit) async {
     emit(StudentPostLoadingState());
+
+    try {
+      final response = await StudentServices.postStudent(
+          firstname: event.firstname,
+          lastname: event.lastname,
+          course: event.course,
+          year: event.year,
+          enrolled: event.enrolled);
+
+      emit(StudentPostSuccessState(successMessage: 'Successfully Added!'));
+    } catch (e) {
+      emit(StudentPostFailedState(errorMessage: '${e}'));
+    }
+  }
+
+  FutureOr<void> studentSelectedYearEvent(
+      StudentSelectedYearEvent event, Emitter<StudentState> emit) {
+    emit(StudentSelectYearState(
+        errorTextSelectedYear: event.errorTextSelectedYear));
+  }
+
+  FutureOr<void> studentEnrolledSwitchEvent(
+      StudentEnrolledSwitchEvent event, Emitter<StudentState> emit) {
+    emit(StudentEnrolledSwitchState(isEnrolled: event.isEnrolled));
   }
 }

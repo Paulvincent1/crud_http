@@ -2,13 +2,19 @@ import 'package:crud_http/bloc/student_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Student extends StatelessWidget {
+class Student extends StatefulWidget {
   const Student({
     super.key,
   });
 
   @override
+  State<Student> createState() => _StudentState();
+}
+
+class _StudentState extends State<Student> with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    print('buildersdasdas');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -31,10 +37,15 @@ class Student extends StatelessWidget {
                   ));
                 }
               },
-              buildWhen: (previous, current) =>
-                  current is! StudentActionState ||
-                  current is StudentActionAndBuildState,
+              buildWhen: (previous, current) {
+                print(
+                    'build when ${(current is! StudentActionState && current is! StudentAddPageState) || current is StudentActionAndBuildState}');
+                return (current is! StudentActionState &&
+                        current is! StudentAddPageState) ||
+                    current is StudentActionAndBuildState;
+              },
               builder: (context, state) {
+                print(state);
                 switch (state.runtimeType) {
                   case StudentFetchLoadingState:
                     return Center(child: CircularProgressIndicator());
@@ -107,4 +118,8 @@ class Student extends StatelessWidget {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

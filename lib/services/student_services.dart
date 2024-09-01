@@ -4,12 +4,12 @@ import 'package:crud_http/model/student.dart';
 import 'package:http/http.dart';
 
 class StudentServices {
-  static const url = "http://192.168.0.13/api/students";
+  static const url = "http://192.168.0.13/api";
 
   static Future<List<Student>> fetchStudents() async {
     try {
       var response = await get(
-        Uri.parse(StudentServices.url),
+        Uri.parse('${url}/students'),
       );
 
       if (response.statusCode == 200) {
@@ -26,6 +26,30 @@ class StudentServices {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  static Future<bool> postStudent(
+      {required String firstname,
+      required String lastname,
+      required String course,
+      required String year,
+      required int enrolled}) async {
+    try {
+      final response = await post(Uri.parse('${url}/student/create'), body: {
+        'first_name': firstname,
+        'last_name': lastname,
+        'course': course,
+        'year': year,
+        'enrolled': enrolled.toString()
+      });
+
+      if (response.statusCode == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw Exception('Failed to load students: ${e}');
     }
   }
 }
