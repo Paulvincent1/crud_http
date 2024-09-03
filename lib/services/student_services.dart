@@ -52,4 +52,21 @@ class StudentServices {
       throw Exception('Failed to load students: ${e}');
     }
   }
+
+  static Future<Student> updateStudent({required int id}) async {
+    try {
+      var response = await get(Uri.parse('${url}/student/upadate/${id}'));
+
+      if (response.statusCode == 200) {
+        var jsonMap = json.decode(response.body);
+        var student = Student.fromMap(jsonMap);
+
+        return student;
+      } else {
+        throw Exception('Failed to load student: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

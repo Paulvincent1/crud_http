@@ -15,6 +15,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     on<StudentPostEvent>(studentPostEvent);
     on<StudentSelectedYearEvent>(studentSelectedYearEvent);
     on<StudentEnrolledSwitchEvent>(studentEnrolledSwitchEvent);
+    on<StudentClickStudentEvent>(studentClickStudentEvent);
   }
 
   FutureOr<void> studentEvent(StudentEvent event, Emitter<StudentState> emit) {}
@@ -60,5 +61,16 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
   FutureOr<void> studentEnrolledSwitchEvent(
       StudentEnrolledSwitchEvent event, Emitter<StudentState> emit) {
     emit(StudentEnrolledSwitchState(isEnrolled: event.isEnrolled));
+  }
+
+  FutureOr<void> studentClickStudentEvent(
+      StudentClickStudentEvent event, Emitter<StudentState> emit) async {
+    emit(StudentNavigateToStudentDataState(student: event.student));
+    // try {
+    //   final student = await StudentServices.fetchStudent(id: event.id);
+    //   emit(StudentNavigateToStudentDataState(student: student));
+    // } catch (e) {
+    //   emit(StudentNavigateToStudentDataFailedState(errorMessage: '${e}'));
+    // }
   }
 }

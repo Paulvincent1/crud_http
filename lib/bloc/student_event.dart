@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'student_bloc.dart';
 
 @immutable
@@ -29,4 +30,11 @@ class StudentPostEvent extends StudentEvent {
       required this.course,
       required this.year,
       required this.enrolled});
+}
+
+class StudentClickStudentEvent extends StudentEvent {
+  Student student;
+  StudentClickStudentEvent({
+    required this.student,
+  });
 }

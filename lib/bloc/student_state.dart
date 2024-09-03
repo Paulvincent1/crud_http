@@ -55,3 +55,18 @@ class StudentEnrolledSwitchState extends StudentActionState {
   bool isEnrolled = false;
   StudentEnrolledSwitchState({required this.isEnrolled});
 }
+
+// navigate to student data
+class StudentNavigateToStudentDataState extends StudentActionState {
+  Student student;
+  StudentNavigateToStudentDataState({
+    required this.student,
+  });
+}
+
+// class StudentNavigateToStudentDataFailedState extends StudentActionState {
+//   String errorMessage;
+//   StudentNavigateToStudentDataFailedState({
+//     required this.errorMessage,
+//   });
+// }

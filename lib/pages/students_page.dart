@@ -1,17 +1,19 @@
 import 'package:crud_http/bloc/student_bloc.dart';
+import 'package:crud_http/model/student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Student extends StatefulWidget {
-  const Student({
+class StudentPage extends StatefulWidget {
+  const StudentPage({
     super.key,
   });
 
   @override
-  State<Student> createState() => _StudentState();
+  State<StudentPage> createState() => _StudentPageState();
 }
 
-class _StudentState extends State<Student> with AutomaticKeepAliveClientMixin {
+class _StudentPageState extends State<StudentPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     print('buildersdasdas');
@@ -30,11 +32,14 @@ class _StudentState extends State<Student> with AutomaticKeepAliveClientMixin {
                   current is StudentActionAndBuildState,
               listener: (context, state) {
                 if (state is StudentFetchFailedState) {
-                  state is StudentFetchFailedState;
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.error),
                     duration: Duration(seconds: 2),
                   ));
+                }
+
+                if (state is StudentNavigateToStudentDataState) {
+                  Navigator.pushNamed(context, '/student-info');
                 }
               },
               buildWhen: (previous, current) {
@@ -60,37 +65,44 @@ class _StudentState extends State<Student> with AutomaticKeepAliveClientMixin {
                       child: ListView.builder(
                         itemCount: state.students.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 18.0, vertical: 8),
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.green[200],
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
+                          return GestureDetector(
+                            onTap: () {
+                              context.read<StudentBloc>().add(
+                                  StudentClickStudentEvent(
+                                      student: state.students[index]));
+                            },
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 18.0, vertical: 8),
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[200],
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 18.0),
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          child: SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                                "${state.students[index].firstName} ${state.students[index].lastName}"),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 18.0),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                  "${state.students[index].firstName} ${state.students[index].lastName}"),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ));
+                                    ],
+                                  ),
+                                )),
+                          );
                         },
                       ),
                     );

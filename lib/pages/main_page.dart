@@ -35,7 +35,7 @@ class MainPage extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            Student(),
+            StudentPage(),
             AddStudent(),
           ],
         ),
