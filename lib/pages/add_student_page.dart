@@ -52,6 +52,7 @@ class _AddStudentState extends State<AddStudent>
             return Center(child: CircularProgressIndicator());
           case StudentPostSuccessState || StudentPostFailedState:
             return StudentForm(
+                page: "Add",
                 formkey: _formkey,
                 firstNameController: firstNameController,
                 lastNameController: lastNameController,
@@ -61,6 +62,7 @@ class _AddStudentState extends State<AddStudent>
                 isEnrolled: isEnrolled);
           default:
             return StudentForm(
+                page: "Add",
                 formkey: _formkey,
                 firstNameController: firstNameController,
                 lastNameController: lastNameController,

@@ -121,7 +121,9 @@ class _StudentPageState extends State<StudentPage>
                       ),
                     );
                   default:
-                    return SizedBox();
+                    return Center(
+                      child: Text('default student page'),
+                    );
                 }
               },
             ),

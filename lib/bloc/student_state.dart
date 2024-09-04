@@ -70,3 +70,10 @@ class StudentNavigateToStudentDataState extends StudentActionState {
 //     required this.errorMessage,
 //   });
 // }
+
+class StudentNavigateToUpdateFormState extends StudentActionState {
+  Student student;
+  StudentNavigateToUpdateFormState({
+    required this.student,
+  });
+}

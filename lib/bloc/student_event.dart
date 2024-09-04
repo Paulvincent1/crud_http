@@ -38,3 +38,10 @@ class StudentClickStudentEvent extends StudentEvent {
     required this.student,
   });
 }
+
+class StudentClickStudentUpdate extends StudentEvent {
+  Student student;
+  StudentClickStudentUpdate({
+    required this.student,
+  });
+}

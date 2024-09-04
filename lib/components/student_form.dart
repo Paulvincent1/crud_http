@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StudentForm extends StatelessWidget {
-  const StudentForm({
+  StudentForm({
     super.key,
     required GlobalKey<FormState> formkey,
     required this.firstNameController,
@@ -12,7 +12,10 @@ class StudentForm extends StatelessWidget {
     required this.runtimeType,
     required this.yearController,
     required this.isEnrolled,
+    required this.page,
   }) : _formkey = formkey;
+
+  String page;
 
   final GlobalKey<FormState> _formkey;
   final TextEditingController firstNameController;
@@ -20,7 +23,7 @@ class StudentForm extends StatelessWidget {
   final TextEditingController courseController;
   final Type runtimeType;
   final TextEditingController yearController;
-  final bool isEnrolled;
+  bool isEnrolled;
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +199,8 @@ class StudentForm extends StatelessWidget {
                   ),
                   BlocBuilder<StudentBloc, StudentState>(
                     buildWhen: (previous, current) =>
-                        current is StudentEnrolledSwitchState,
+                        current is StudentEnrolledSwitchState ||
+                        current is StudentNavigateToUpdateFormState,
                     builder: (context, state) {
                       switch (state.runtimeType) {
                         case StudentEnrolledSwitchState:
@@ -208,6 +212,19 @@ class StudentForm extends StatelessWidget {
                               context.read<StudentBloc>().add(
                                   StudentEnrolledSwitchEvent(
                                       isEnrolled: value));
+                              isEnrolled = value;
+                            },
+                          );
+                        case StudentNavigateToUpdateFormState:
+                          state as StudentNavigateToUpdateFormState;
+                          return Switch(
+                            activeColor: Colors.green,
+                            value: state.student.enrolled == 1 ? true : false,
+                            onChanged: (value) {
+                              context.read<StudentBloc>().add(
+                                  StudentEnrolledSwitchEvent(
+                                      isEnrolled: value));
+                              isEnrolled = value;
                             },
                           );
                         default:
@@ -217,6 +234,7 @@ class StudentForm extends StatelessWidget {
                               context.read<StudentBloc>().add(
                                   StudentEnrolledSwitchEvent(
                                       isEnrolled: value));
+                              isEnrolled = value;
                             },
                           );
                       }
@@ -256,7 +274,7 @@ class StudentForm extends StatelessWidget {
                                         'Please select a year'));
                           }
                         },
-                        child: Text('Add'),
+                        child: Text(page),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green[200],
                           foregroundColor: Colors.black,
