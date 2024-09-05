@@ -12,6 +12,8 @@ class StudentActionAndBuildState extends StudentState {}
 
 class StudentUpdatePageState extends StudentState {}
 
+class StudentDeleteState extends StudentState {}
+
 final class StudentInitial extends StudentState {}
 
 class StudentFetchLoadingState extends StudentState {}
@@ -73,6 +75,8 @@ class StudentNavigateToStudentDataState extends StudentActionState {
 //   });
 // }
 
+//update
+
 class StudentNavigateToUpdateFormState extends StudentActionState {
   Student student;
   StudentNavigateToUpdateFormState({
@@ -104,3 +108,23 @@ class StudentFetchOneSuccessState extends StudentUpdatePageState {
 }
 
 class StudentFetchOneLoadingState extends StudentUpdatePageState {}
+
+class StudentFetchOneFailedState extends StudentActionState {
+  String errorMessage;
+  StudentFetchOneFailedState({
+    required this.errorMessage,
+  });
+}
+
+// delete
+
+class StudentDeleteLoadingState extends StudentDeleteState {}
+
+class StudentDeleteSuccessState extends StudentDeleteState {}
+
+class StudentDeleteFailedState extends StudentDeleteState {
+  String errorMessage;
+  StudentDeleteFailedState({
+    required this.errorMessage,
+  });
+}

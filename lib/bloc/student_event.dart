@@ -68,3 +68,10 @@ class StudentFetchEvent extends StudentEvent {
     required this.id,
   });
 }
+
+class StudentDeleteClickButtonEvent extends StudentEvent {
+  int id;
+  StudentDeleteClickButtonEvent({
+    required this.id,
+  });
+}

@@ -20,23 +20,6 @@ class StudentUpdatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: BlocBuilder<StudentBloc, StudentState>(
-            buildWhen: (previous, current) =>
-                current is StudentUpdateLoadingState,
-            builder: (context, state) {
-              switch (state.runtimeType) {
-                case StudentUpdateLoadingState:
-                  return IconButton(
-                      onPressed: () {}, icon: Icon(Icons.arrow_back));
-                default:
-                  return IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back));
-              }
-            },
-          ),
           title: Text('Update Student'),
           centerTitle: true,
           foregroundColor: Colors.white,

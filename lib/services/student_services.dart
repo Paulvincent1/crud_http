@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crud_http/bloc/student_bloc.dart';
 import 'package:crud_http/model/student.dart';
 import 'package:http/http.dart';
 
@@ -87,7 +88,6 @@ class StudentServices {
           'course': course,
           'year': year,
           'enrolled': enrolled.toString(),
-         
         },
       );
 
@@ -98,6 +98,19 @@ class StudentServices {
       }
     } catch (e) {
       throw ('Failed to update student details: ${e}');
+    }
+  }
+
+  static Future<bool> deleteStudent({required int id}) async {
+    try {
+      var response = await delete(Uri.parse('${url}/student/delete/${id}'));
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return throw Exception('Cant Delete!: ${e}');
     }
   }
 }

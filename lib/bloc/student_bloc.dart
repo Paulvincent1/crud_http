@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:crud_http/model/student.dart';
 import 'package:crud_http/pages/student_info_page.dart';
 import 'package:crud_http/services/student_services.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'student_event.dart';
@@ -22,6 +23,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
         studentClickStudentUpdateButtonEvent);
     on<StudentPutUpdateEvent>(studentPutUpdateEvent);
     on<StudentFetchEvent>(studentFetchEvent);
+    on<StudentDeleteClickButtonEvent>(studentDeleteClickButtonEvent);
   }
 
   FutureOr<void> studentEvent(StudentEvent event, Emitter<StudentState> emit) {}
@@ -55,7 +57,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       if (response) {
         emit(StudentPostSuccessState(successMessage: 'Successfully Added!'));
       } else {
-        emit(StudentPostFailedState(errorMessage: 'Cannot Add!'));
+        emit(StudentPostFailedState(errorMessage: 'Cannot Add Student!'));
       }
     } catch (e) {
       emit(StudentPostFailedState(errorMessage: '${e}'));
@@ -104,7 +106,7 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
       if (response) {
         emit(StudentUpdateSucessState(message: 'Successfully Updated!'));
       } else {
-        emit(StudentUpdateFailedState(errorMessage: 'Cant Update'));
+        emit(StudentUpdateFailedState(errorMessage: 'Cant Update Student!'));
       }
     } catch (e) {
       emit(StudentUpdateFailedState(errorMessage: '${e}'));
@@ -117,6 +119,24 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     try {
       var response = await StudentServices.showStudent(id: event.id);
       emit(StudentFetchOneSuccessState(student: response));
-    } catch (e) {}
+    } catch (e) {
+      emit(StudentFetchOneFailedState(errorMessage: '${e}'));
+    }
+  }
+
+  FutureOr<void> studentDeleteClickButtonEvent(
+      StudentDeleteClickButtonEvent event, Emitter<StudentState> emit) async {
+    emit(StudentDeleteLoadingState());
+    try {
+      var response = await StudentServices.deleteStudent(id: event.id);
+
+      if (response) {
+        emit(StudentDeleteSuccessState());
+      } else {
+        emit(StudentDeleteFailedState(errorMessage: 'Cant Delete Student!'));
+      }
+    } catch (e) {
+      emit(StudentDeleteFailedState(errorMessage: '${e}'));
+    }
   }
 }

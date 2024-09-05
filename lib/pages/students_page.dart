@@ -31,7 +31,8 @@ class _StudentPageState extends State<StudentPage>
                   current is StudentActionState ||
                   current is StudentActionAndBuildState ||
                   current is StudentFetchOneSuccessState ||
-                  current is StudentPostSuccessState,
+                  current is StudentPostSuccessState ||
+                  current is StudentDeleteState,
               listener: (context, state) {
                 if (state is StudentFetchFailedState) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -49,17 +50,22 @@ class _StudentPageState extends State<StudentPage>
                   context.read<StudentBloc>().add(StudentsFetchEvent());
                 }
 
-                if(state is StudentPostSuccessState){
+                if (state is StudentPostSuccessState) {
                   //for adding a student it needs to update the list.
+                  context.read<StudentBloc>().add(StudentsFetchEvent());
+                }
+
+                if (state is StudentDeleteSuccessState) {
+                   //for deleting a student it needs to update the list.
                   context.read<StudentBloc>().add(StudentsFetchEvent());
                 }
               },
               buildWhen: (previous, current) {
-                print(
-                    'build when ${(current is! StudentActionState && current is! StudentAddPageState) || current is StudentActionAndBuildState}');
+                // check the state if true.
                 return (current is! StudentActionState &&
                         current is! StudentAddPageState &&
-                        current is! StudentUpdatePageState) ||
+                        current is! StudentUpdatePageState &&
+                        current is! StudentDeleteState) ||
                     current is StudentActionAndBuildState;
               },
               builder: (context, state) {
