@@ -29,7 +29,9 @@ class _StudentPageState extends State<StudentPage>
             child: BlocConsumer<StudentBloc, StudentState>(
               listenWhen: (previous, current) =>
                   current is StudentActionState ||
-                  current is StudentActionAndBuildState,
+                  current is StudentActionAndBuildState ||
+                  current is StudentFetchOneSuccessState ||
+                  current is StudentPostSuccessState,
               listener: (context, state) {
                 if (state is StudentFetchFailedState) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -41,12 +43,23 @@ class _StudentPageState extends State<StudentPage>
                 if (state is StudentNavigateToStudentDataState) {
                   Navigator.pushNamed(context, '/student-info');
                 }
+
+                if (state is StudentFetchOneSuccessState) {
+                  // for updating the student it needs to update the list.
+                  context.read<StudentBloc>().add(StudentsFetchEvent());
+                }
+
+                if(state is StudentPostSuccessState){
+                  //for adding a student it needs to update the list.
+                  context.read<StudentBloc>().add(StudentsFetchEvent());
+                }
               },
               buildWhen: (previous, current) {
                 print(
                     'build when ${(current is! StudentActionState && current is! StudentAddPageState) || current is StudentActionAndBuildState}');
                 return (current is! StudentActionState &&
-                        current is! StudentAddPageState) ||
+                        current is! StudentAddPageState &&
+                        current is! StudentUpdatePageState) ||
                     current is StudentActionAndBuildState;
               },
               builder: (context, state) {

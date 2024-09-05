@@ -53,9 +53,9 @@ class StudentServices {
     }
   }
 
-  static Future<Student> updateStudent({required int id}) async {
+  static Future<Student> showStudent({required int id}) async {
     try {
-      var response = await get(Uri.parse('${url}/student/upadate/${id}'));
+      var response = await get(Uri.parse('${url}/student/${id}'));
 
       if (response.statusCode == 200) {
         var jsonMap = json.decode(response.body);
@@ -67,6 +67,37 @@ class StudentServices {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  static Future<bool> updateStudent({
+    required int id,
+    required String firstName,
+    required String lastName,
+    required String course,
+    required String year,
+    required int enrolled,
+  }) async {
+    try {
+      var response = await put(
+        Uri.parse('${url}/student/update/${id}'),
+        body: {
+          'first_name': firstName,
+          'last_name': lastName,
+          'course': course,
+          'year': year,
+          'enrolled': enrolled.toString(),
+         
+        },
+      );
+
+      if (response.statusCode == 202) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw ('Failed to update student details: ${e}');
     }
   }
 }

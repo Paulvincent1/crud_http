@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:crud_http/model/student.dart';
+import 'package:crud_http/pages/student_info_page.dart';
 import 'package:crud_http/services/student_services.dart';
 import 'package:meta/meta.dart';
 
@@ -16,7 +18,10 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     on<StudentSelectedYearEvent>(studentSelectedYearEvent);
     on<StudentEnrolledSwitchEvent>(studentEnrolledSwitchEvent);
     on<StudentClickStudentEvent>(studentClickStudentEvent);
-    on<StudentClickStudentUpdate>(studentClickStudentUpdate);
+    on<StudentClickStudentUpdateButtonEvent>(
+        studentClickStudentUpdateButtonEvent);
+    on<StudentPutUpdateEvent>(studentPutUpdateEvent);
+    on<StudentFetchEvent>(studentFetchEvent);
   }
 
   FutureOr<void> studentEvent(StudentEvent event, Emitter<StudentState> emit) {}
@@ -47,7 +52,11 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
           year: event.year,
           enrolled: event.enrolled);
 
-      emit(StudentPostSuccessState(successMessage: 'Successfully Added!'));
+      if (response) {
+        emit(StudentPostSuccessState(successMessage: 'Successfully Added!'));
+      } else {
+        emit(StudentPostFailedState(errorMessage: 'Cannot Add!'));
+      }
     } catch (e) {
       emit(StudentPostFailedState(errorMessage: '${e}'));
     }
@@ -75,8 +84,39 @@ class StudentBloc extends Bloc<StudentEvent, StudentState> {
     // }
   }
 
-  FutureOr<void> studentClickStudentUpdate(
-      StudentClickStudentUpdate event, Emitter<StudentState> emit) {
+  FutureOr<void> studentClickStudentUpdateButtonEvent(
+      StudentClickStudentUpdateButtonEvent event, Emitter<StudentState> emit) {
     emit(StudentNavigateToUpdateFormState(student: event.student));
+  }
+
+  FutureOr<void> studentPutUpdateEvent(
+      StudentPutUpdateEvent event, Emitter<StudentState> emit) async {
+    emit(StudentUpdateLoadingState());
+    try {
+      var response = await StudentServices.updateStudent(
+        id: event.id,
+        firstName: event.firstname,
+        lastName: event.lastname,
+        course: event.course,
+        year: event.year,
+        enrolled: event.enrolled,
+      );
+      if (response) {
+        emit(StudentUpdateSucessState(message: 'Successfully Updated!'));
+      } else {
+        emit(StudentUpdateFailedState(errorMessage: 'Cant Update'));
+      }
+    } catch (e) {
+      emit(StudentUpdateFailedState(errorMessage: '${e}'));
+    }
+  }
+
+  FutureOr<void> studentFetchEvent(
+      StudentFetchEvent event, Emitter<StudentState> emit) async {
+    emit(StudentFetchOneLoadingState());
+    try {
+      var response = await StudentServices.showStudent(id: event.id);
+      emit(StudentFetchOneSuccessState(student: response));
+    } catch (e) {}
   }
 }

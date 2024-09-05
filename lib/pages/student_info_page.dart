@@ -38,9 +38,15 @@ class StudentInfoPage extends StatelessWidget {
                   Navigator.pushNamed(context, '/student-update');
                 }
               },
-              buildWhen: (previous, current) => current is! StudentActionState,
+              buildWhen: (previous, current) =>
+                  current is StudentNavigateToStudentDataState ||
+                  current is StudentUpdatePageState,
               builder: (context, state) {
                 switch (state.runtimeType) {
+                  case StudentFetchOneLoadingState:
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
                   case StudentNavigateToStudentDataState:
                     state as StudentNavigateToStudentDataState;
                     return Padding(
@@ -173,7 +179,7 @@ class StudentInfoPage extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     context.read<StudentBloc>().add(
-                                        StudentClickStudentUpdate(
+                                        StudentClickStudentUpdateButtonEvent(
                                             student: state.student));
                                   },
                                   child: Text('Update'),
@@ -198,7 +204,163 @@ class StudentInfoPage extends StatelessWidget {
                         ],
                       ),
                     );
-
+                  case StudentFetchOneSuccessState:
+                    state as StudentFetchOneSuccessState;
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Student Information'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Student\'s First Name:',
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.green[600]),
+                                  ),
+                                  Text(
+                                    state.student.firstName,
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.grey[600]),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Student\'s Last Name:',
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.green[600]),
+                                  ),
+                                  Text(
+                                    state.student.lastName,
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.grey[600]),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Course:',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.green[600])),
+                                  Text(state.student.course,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.grey[600])),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Year:',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.green[600])),
+                                  Text(state.student.year,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.grey[600])),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Enrolled:',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.green[600])),
+                                  Text(
+                                      state.student.enrolled == 1
+                                          ? "Yes"
+                                          : "No",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.grey[600])),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(100, 40),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(0)),
+                                    backgroundColor: Colors.green,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    context.read<StudentBloc>().add(
+                                        StudentClickStudentUpdateButtonEvent(
+                                            student: state.student));
+                                  },
+                                  child: Text('Update'),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(0)),
+                                    minimumSize: const Size(100, 40),
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  onPressed: () {},
+                                  child: Text('Delete'),
+                                ),
+                              ],
+                            ),
+                          )),
+                        ],
+                      ),
+                    );
                   default:
                     return Center(
                       child: Text('default student info page'),

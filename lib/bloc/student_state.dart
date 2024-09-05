@@ -10,6 +10,8 @@ class StudentAddPageState extends StudentState {}
 
 class StudentActionAndBuildState extends StudentState {}
 
+class StudentUpdatePageState extends StudentState {}
+
 final class StudentInitial extends StudentState {}
 
 class StudentFetchLoadingState extends StudentState {}
@@ -77,3 +79,28 @@ class StudentNavigateToUpdateFormState extends StudentActionState {
     required this.student,
   });
 }
+
+class StudentUpdateLoadingState extends StudentUpdatePageState {}
+
+class StudentUpdateSucessState extends StudentActionState {
+  String message;
+  StudentUpdateSucessState({
+    required this.message,
+  });
+}
+
+class StudentUpdateFailedState extends StudentActionState {
+  String errorMessage;
+  StudentUpdateFailedState({
+    required this.errorMessage,
+  });
+}
+
+class StudentFetchOneSuccessState extends StudentUpdatePageState {
+  Student student;
+  StudentFetchOneSuccessState({
+    required this.student,
+  });
+}
+
+class StudentFetchOneLoadingState extends StudentUpdatePageState {}

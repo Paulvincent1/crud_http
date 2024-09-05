@@ -13,9 +13,11 @@ class StudentForm extends StatelessWidget {
     required this.yearController,
     required this.isEnrolled,
     required this.page,
+    this.id,
   }) : _formkey = formkey;
 
   String page;
+  int? id;
 
   final GlobalKey<FormState> _formkey;
   final TextEditingController firstNameController;
@@ -217,6 +219,8 @@ class StudentForm extends StatelessWidget {
                           );
                         case StudentNavigateToUpdateFormState:
                           state as StudentNavigateToUpdateFormState;
+                          isEnrolled =
+                              state.student.enrolled == 1 ? true : false;
                           return Switch(
                             activeColor: Colors.green,
                             value: state.student.enrolled == 1 ? true : false,
@@ -258,14 +262,27 @@ class StudentForm extends StatelessWidget {
                           if (yearController.text.isNotEmpty) {
                             if (valid!) {
                               // _formkey.currentState?.save();
-                              context.read<StudentBloc>().add(StudentPostEvent(
-                                  firstname: firstNameController.text,
-                                  lastname: lastNameController.text,
-                                  course: courseController.text,
-                                  year: yearController.text,
-                                  enrolled: isEnrolled ? 1 : 0));
+                              if (page == 'Add') {
+                                context.read<StudentBloc>().add(
+                                    StudentPostEvent(
+                                        firstname: firstNameController.text,
+                                        lastname: lastNameController.text,
+                                        course: courseController.text,
+                                        year: yearController.text,
+                                        enrolled: isEnrolled ? 1 : 0));
 
-                              clear();
+                                clear();
+                              } else if (page == 'Update') {
+                                print('hello');
+                                context.read<StudentBloc>().add(
+                                    StudentPutUpdateEvent(
+                                        id: id!,
+                                        firstname: firstNameController.text,
+                                        lastname: lastNameController.text,
+                                        course: courseController.text,
+                                        year: yearController.text,
+                                        enrolled: isEnrolled ? 1 : 0));
+                              }
                             }
                           } else {
                             context.read<StudentBloc>().add(

@@ -39,9 +39,32 @@ class StudentClickStudentEvent extends StudentEvent {
   });
 }
 
-class StudentClickStudentUpdate extends StudentEvent {
+class StudentClickStudentUpdateButtonEvent extends StudentEvent {
   Student student;
-  StudentClickStudentUpdate({
+  StudentClickStudentUpdateButtonEvent({
     required this.student,
+  });
+}
+
+class StudentPutUpdateEvent extends StudentEvent {
+  int id;
+  String firstname;
+  String lastname;
+  String course;
+  String year;
+  int enrolled;
+  StudentPutUpdateEvent(
+      {required this.id,
+      required this.firstname,
+      required this.lastname,
+      required this.course,
+      required this.year,
+      required this.enrolled});
+}
+
+class StudentFetchEvent extends StudentEvent {
+  int id;
+  StudentFetchEvent({
+    required this.id,
   });
 }
